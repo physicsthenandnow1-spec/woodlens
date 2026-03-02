@@ -452,7 +452,12 @@ function goTab(name,btn) {
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
   document.getElementById('panel-'+name).classList.add('on');
   btn.classList.add('on');
-  if(name==='data')refreshData();
+  if(name==='data') refreshData();
+  // Auto-rebuild model if switching to test and model is missing but samples exist
+  if(name==='test' && !model && buf.length>=2 && S.classes.length>=2) {
+    setStatus('Rebuilding model from saved samples…','',true);
+    retrain().then(()=>{ if(model) setStatus('Model ready! Upload an image to test.','ok'); });
+  }
 }
 
 // ─────────────────────────────────────────────
@@ -585,7 +590,17 @@ async function retrain() {
 // ─────────────────────────────────────────────
 async function doPred() {
   if(!testTens){setStatus('No image loaded.','err');return;}
-  if(!model){setStatus('No trained model yet — add training samples first.','err');return;}
+  if(!model){
+    // Try to retrain from buffer if we have samples
+    if(buf.length>=2 && S.classes.length>=2){
+      setStatus('Rebuilding model from saved samples…','',true);
+      await retrain();
+      if(!model){setStatus('Model rebuild failed. Try RESTORE FROM DRIVE.','err');return;}
+    } else {
+      setStatus('No trained model — go to DRIVE tab and tap RESTORE FROM DRIVE.','err');
+      return;
+    }
+  }
   setStatus('Analyzing…','',true);
   document.getElementById('pred-btn').disabled=true;
   const f=extractFeat(testTens);
@@ -847,21 +862,50 @@ async function cloudSync(dir) {
       log('☁ Saved to Google Drive','hi');
     } else {
       const eid=await findFile('woodlens_data.json',fid);
-      if(!eid){log('No saved data on Drive yet.');return;}
-      const blob=await dload(eid); const data=JSON.parse(await blob.text());
+      if(!eid){log('No saved data on Drive yet. Train some samples first!','w');setStatus('No saved data found on Drive.','err');return;}
+      setStatus('Downloading data from Drive…','',true);
+      const blob=await dload(eid);
+      const text=await blob.text();
+      let data;
+      try { data=JSON.parse(text); } catch(e){ log('❌ Corrupted data file on Drive: '+e.message,'w'); setStatus('Data file corrupted.','err'); return; }
+
+      // Restore state - handle both old and new key formats
       if(data.state){S.classes=data.state.classes||[];S.counts=data.state.counts||{};S.sessions=data.state.sessions||0;S.lastAcc=data.state.lastAcc||null;}
-      if(data.buf) buf=data.buf;
-      if(data.topology&&data.weights&&S.classes.length>=2) {
-        if(model)try{model.dispose()}catch(e){}
-        model=await tf.models.modelFromJSON(data.topology);
-        model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
-        const a=data.weights.map(w=>tf.tensor(w.d,w.s,w.t)); model.setWeights(a); a.forEach(t=>t.dispose());
+      // Support both 'buf' and 'trainingBuffer' key names
+      const rawBuf = data.buf || data.trainingBuffer || [];
+      if(rawBuf.length) buf=rawBuf;
+
+      log(`⬇ Loaded: ${buf.length} samples, ${S.classes.length} classes`,'hi');
+
+      // Try to restore saved model weights
+      let modelRestored=false;
+      if(data.topology && data.weights && data.weights.length && S.classes.length>=2) {
+        try {
+          if(model)try{model.dispose()}catch(e){}
+          model=await tf.models.modelFromJSON(data.topology);
+          model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
+          const a=data.weights.map(w=>tf.tensor(w.d,w.s,w.t));
+          model.setWeights(a); a.forEach(t=>t.dispose());
+          modelRestored=true;
+          log('✔ Model weights restored!','hi');
+        } catch(e) {
+          log('⚠ Could not restore weights, retraining from samples…','w');
+          model=null;
+        }
       }
-      await saveLocal(); renderAll();
-      setStatus(`Restored from Drive: ${buf.length} samples, ${S.classes.length} species`,'ok');
-      log(`⬇ Restored from Drive: ${buf.length} samples`,'hi');
+
+      // If weights failed but we have samples, retrain from scratch
+      if(!modelRestored && buf.length>=S.classes.length && S.classes.length>=2) {
+        log('Retraining model from saved samples…','hi');
+        await saveLocal(); renderAll();
+        await retrain();
+      } else {
+        await saveLocal(); renderAll();
+      }
+
+      setStatus(`Restored: ${buf.length} samples, ${S.classes.length} species, acc: ${S.lastAcc||'—'}`,'ok');
     }
-  } catch(e) { log('Drive sync error: '+e.message,'w'); }
+  } catch(e) { log('❌ Drive sync error: '+e.message,'w'); setStatus('Drive error: '+e.message,'err'); }
 }
 
 async function logResult(cls,conf) {
