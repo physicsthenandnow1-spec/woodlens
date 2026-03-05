@@ -355,7 +355,7 @@ const IMAGE_MIMES = ['image/jpeg','image/png','image/webp','image/bmp'];
 const DATASET_FOLDER_NAME = 'WoodDataset';
 const SAVE_FOLDER_NAME    = 'WoodLens';
 
-let CLIENT_ID = localStorage.getItem('wl_cid') || '';
+let CLIENT_ID = localStorage.getItem('wl_cid') || '628099960268-1imb5igfssu5ji4pq0rnitr3sq2iaehl.apps.googleusercontent.com';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -966,8 +966,8 @@ async function init() {
   await loadLocal();
   if(CLIENT_ID) document.getElementById('cid-inp').value=CLIENT_ID;
   renderAll();
-  // Try to init GIS (may not be loaded yet)
-  if(CLIENT_ID) setTimeout(initGIS, 1500);
+  // Auto-init GIS since Client ID is hardcoded
+  if(CLIENT_ID) setTimeout(initGIS, 1800);
   try {
     await loadFeat();
     await loadModelLocal();
