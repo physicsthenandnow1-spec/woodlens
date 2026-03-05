@@ -504,6 +504,29 @@ function checkReady() { document.getElementById('train-btn').disabled=!(selTrain
 // ─────────────────────────────────────────────
 //  IMAGE HELPERS
 // ─────────────────────────────────────────────
+
+function augmentImage(t){
+
+return tf.tidy(()=>{
+
+let img = t;
+
+if(Math.random() > 0.5)
+img = tf.image.flipLeftRight(img);
+
+if(Math.random() > 0.5)
+img = tf.image.flipUpDown(img);
+
+const angle = (Math.random() - 0.5) * 0.3;
+
+img = tf.image.rotateWithOffset(img, angle, 0);
+
+return img;
+
+});
+
+}
+
 function file2tensor(file) {
   return new Promise(res=>{
     const img=new Image(); img.onload=()=>{
@@ -512,21 +535,6 @@ function file2tensor(file) {
     };
     img.src=URL.createObjectURL(file);
   });
-}
-async function trainLocal(e) {
-  const f=e.target.files[0]; if(!f)return;
-  showPrev('tz',URL.createObjectURL(f));
-  if(trainTens)trainTens.dispose();
-  trainTens=await file2tensor(f);
-  checkReady();
-}
-async function testLocal(e) {
-  const f=e.target.files[0]; if(!f)return;
-  showPrev('tstz',URL.createObjectURL(f));
-  if(testTens)testTens.dispose();
-  testTens=await file2tensor(f);
-  document.getElementById('pred-btn').disabled=false;
-  document.getElementById('rc').classList.remove('on');
 }
 
 // ─────────────────────────────────────────────
@@ -549,7 +557,8 @@ async function doTrain() {
   if(S.classes.length<2){log('Need ≥ 2 species to start training.','w');return;}
   busy=true; document.getElementById('train-btn').disabled=true;
   setStatus('Extracting features…','',true);
-  const f=extractFeat(trainTens);
+  const aug = augmentImage(trainTens);
+  const f = extractFeat(aug);
   buf.push({data:Array.from(f.dataSync()),label:S.classes.indexOf(selTrain)});
   f.dispose();
   S.counts[selTrain]=(S.counts[selTrain]||0)+1;
@@ -559,30 +568,91 @@ async function doTrain() {
 }
 
 async function retrain() {
+
   const n=S.classes.length;
-  if(buf.length<n){setStatus(`Need more samples (${buf.length}/${n} min)`,'');return;}
-  setStatus('Training classifier…','',true); setProg(8);
+
+  if(buf.length<n){
+    setStatus(`Need more samples (${buf.length}/${n} min)`,'');
+    return;
+  }
+
+  setStatus('Training classifier…','',true);
+  setProg(8);
+
   const fs=buf[0].data.length;
+
   const xs=tf.tensor2d(buf.map(s=>s.data),[buf.length,fs]);
   const ys=tf.oneHot(tf.tensor1d(buf.map(s=>s.label),'int32'),n);
+
   if(model)try{model.dispose()}catch(e){}
-  model=tf.sequential();
-  model.add(tf.layers.dense({inputShape:[fs],units:256,activation:'relu',kernelRegularizer:tf.regularizers.l2({l2:0.001})}));
-  model.add(tf.layers.dropout({rate:0.35}));
-  model.add(tf.layers.dense({units:n,activation:'softmax'}));
-  model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
-  const ep=Math.min(60,Math.max(20,buf.length*3));
-  let la=0;
-  await model.fit(xs,ys,{epochs:ep,batchSize:Math.min(16,buf.length),shuffle:true,
-    callbacks:{onEpochEnd:(i,lg)=>{setProg(8+(i+1)/ep*87);la=lg.acc;}}
+
+  model = tf.sequential();
+
+  model.add(tf.layers.dense({
+    inputShape:[fs],
+    units:512,
+    activation:'relu'
+  }));
+
+  model.add(tf.layers.batchNormalization());
+
+  model.add(tf.layers.dropout({
+    rate:0.4
+  }));
+
+  model.add(tf.layers.dense({
+    units:256,
+    activation:'relu'
+  }));
+
+  model.add(tf.layers.dense({
+    units:n,
+    activation:'softmax'
+  }));
+
+  model.compile({
+    optimizer:tf.train.adam(0.001),
+    loss:'categoricalCrossentropy',
+    metrics:['accuracy']
   });
-  xs.dispose(); ys.dispose(); setProg(100);
-  S.sessions++; S.lastAcc=(la*100).toFixed(1)+'%';
-  await saveLocal(); await saveModelLocal();
+
+  const ep=Math.min(60,Math.max(20,buf.length*3));
+
+  let la=0;
+
+  await model.fit(xs,ys,{
+    epochs:ep,
+    batchSize:Math.min(16,buf.length),
+    shuffle:true,
+    callbacks:{
+      onEpochEnd:(i,lg)=>{
+        setProg(8+(i+1)/ep*87);
+        la=lg.acc;
+      }
+    }
+  });
+
+  xs.dispose();
+  ys.dispose();
+
+  setProg(100);
+
+  S.sessions++;
+  S.lastAcc=(la*100).toFixed(1)+'%';
+
+  await saveLocal();
+  await saveModelLocal();
+
   log(`✔ Training done! Accuracy: ${S.lastAcc}`,'hi');
+
+  evaluateModel();
+
   setStatus(`Done! Accuracy: ${S.lastAcc}`,'ok');
+
   setTimeout(()=>setProg(0),1200);
+
   if(token) cloudSync('save');
+
 }
 
 // ─────────────────────────────────────────────
@@ -985,6 +1055,28 @@ async function init() {
   }
 }
 
+function evaluateModel(){
+
+let correct = 0;
+
+buf.forEach(sample=>{
+
+const x = tf.tensor2d([sample.data]);
+
+const pred = model.predict(x);
+
+const p = pred.argMax(1).dataSync()[0];
+
+if(p === sample.label) correct++;
+
+});
+
+const acc = correct / buf.length;
+
+console.log("Training accuracy:", acc);
+
+}
+  
 init();
 </script>
 </body>
