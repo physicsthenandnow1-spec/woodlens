@@ -554,11 +554,11 @@ async function doBatchTrain() {
   const total = trainQueue.length;
   let done = 0;
 
-  log(`Starting batch training: ${total} images for ${selTrain}…`, 'hi');
+  log(`Batch training: ${total} images × 5 augments = ${total*5} samples for ${selTrain}…`, 'hi');
 
   for(const file of trainQueue) {
-    setStatus(`Processing image ${done+1}/${total}…`, '', true);
-    document.getElementById('mq-txt').textContent = `Training ${done+1} of ${total}…`;
+    setStatus(`Image ${done+1}/${total} → extracting 5 augmented versions…`, '', true);
+    document.getElementById('mq-txt').textContent = `Image ${done+1} of ${total} (×5 augments each)`;
     document.getElementById('mq-fill').style.width = (done/total*100)+'%';
     document.getElementById('mq-pct').textContent = Math.round(done/total*100)+'%';
 
@@ -571,10 +571,13 @@ async function doBatchTrain() {
         aug.dispose();
         buf.push({data: Array.from(f.dataSync()), label});
         f.dispose();
+        // Update count for each augmented sample
+        S.counts[selTrain] = (S.counts[selTrain]||0) + 1;
       }
       t.dispose();
-      S.counts[selTrain] = (S.counts[selTrain]||0) + 1;
       done++;
+      // Update bars live
+      renderSbars();
     } catch(e) {
       log(`Skipped ${file.name}: ${e.message}`, 'w');
     }
@@ -582,10 +585,10 @@ async function doBatchTrain() {
 
   document.getElementById('mq-fill').style.width = '100%';
   document.getElementById('mq-pct').textContent = '100%';
-  document.getElementById('mq-txt').textContent = `✔ ${done} images processed!`;
+  document.getElementById('mq-txt').textContent = `✔ ${done} images × 5 = ${done*5} samples added!`;
 
   await saveLocal(); renderAll();
-  log(`✔ Batch complete: ${done} images × 5 augments = ${done*5} samples added for ${selTrain}`, 'hi');
+  log(`✔ Batch done! Added ${done*5} samples for ${selTrain}. Total buffer: ${buf.length}`, 'hi');
 
   // Retrain once after all images
   await retrain();
@@ -632,10 +635,10 @@ async function doTrain() {
     aug.dispose();
     buf.push({data:Array.from(f.dataSync()), label});
     f.dispose();
+    S.counts[selTrain]=(S.counts[selTrain]||0)+1;
   }
-  S.counts[selTrain]=(S.counts[selTrain]||0)+1;
   await saveLocal(); renderAll();
-  log(`Added 5 augmented samples for ${selTrain}. Total: ${buf.length}`);
+  log(`Added 5 augmented samples for ${selTrain}. Total samples: ${buf.length}`);
   await retrain();
   busy=false; document.getElementById('train-btn').disabled=false;
 }
