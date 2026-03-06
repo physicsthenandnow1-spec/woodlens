@@ -517,11 +517,12 @@ function checkReady(){
 // ══════════════════════════════════════════════
 function augmentImage(t){
   return tf.tidy(()=>{
-    let img=t.squeeze([0]); // [H,W,3]
+    // Keep rank-4 [1,H,W,3] throughout — flipLeftRight/flipUpDown require rank 4
+    let img = t; // already [1,224,224,3]
 
-    // Random horizontal flip
+    // Random horizontal flip (rank 4 required)
     if(Math.random()>0.5) img=tf.image.flipLeftRight(img);
-    // Random vertical flip
+    // Random vertical flip (rank 4 required)
     if(Math.random()>0.5) img=tf.image.flipUpDown(img);
 
     // Random brightness ±25%
@@ -533,20 +534,21 @@ function augmentImage(t){
     const mean=img.mean();
     img=tf.clipByValue(img.sub(mean).mul(factor).add(mean),0,1);
 
-    // IMPROVEMENT 9: zoom/crop simulation — random crop then resize back
-    const [h,w]=img.shape.slice(0,2);
-    const cropFrac=0.8+Math.random()*0.2; // crop 80–100% of image
+    // Zoom/crop: squeeze to rank 3 only for slice+resize, then expand back
+    const img3=img.squeeze([0]); // [224,224,3]
+    const [h,w]=img3.shape.slice(0,2);
+    const cropFrac=0.8+Math.random()*0.2;
     const ch=Math.floor(h*cropFrac), cw=Math.floor(w*cropFrac);
     const y1=Math.floor(Math.random()*(h-ch));
     const x1=Math.floor(Math.random()*(w-cw));
-    img=tf.image.resizeBilinear(img.slice([y1,x1,0],[ch,cw,3]),[224,224]);
-    img=tf.clipByValue(img,0,1);
+    const cropped=tf.image.resizeBilinear(img3.slice([y1,x1,0],[ch,cw,3]),[224,224]);
+    img=tf.clipByValue(cropped.expandDims(0),0,1);
 
-    // Tiny Gaussian noise
+    // Tiny noise
     const noise=tf.randomNormal(img.shape,0,0.015);
     img=tf.clipByValue(img.add(noise),0,1);
 
-    return img.expandDims(0);
+    return img; // rank 4
   });
 }
 
