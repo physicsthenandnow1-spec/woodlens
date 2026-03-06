@@ -724,22 +724,28 @@ async function doPred() {
       return;
     }
   }
-  setStatus('Analyzing (test-time augmentation)…','',true);
+  setStatus('Analyzing…','',true);
   document.getElementById('pred-btn').disabled=true;
 
-  // Test-time augmentation: run 5 augmented versions, average predictions
+  // Test-time augmentation: run 3 versions, average predictions
   const allProbs = [];
-  for(let i=0;i<5;i++){
-    const aug = i===0 ? testTens : augmentImage(testTens);
-    const f = extractFeat(aug);
-    if(i!==0) aug.dispose();
-    const flat = f.reshape([1,f.shape[f.shape.length-1]]);
-    const p = model.predict(flat);
-    allProbs.push(Array.from(p.dataSync()));
-    f.dispose(); flat.dispose(); p.dispose();
+  try {
+    for(let i=0;i<3;i++){
+      const aug = i===0 ? testTens : augmentImage(testTens);
+      const f = extractFeat(aug);
+      if(i!==0) aug.dispose();
+      const flat = f.reshape([1,f.shape[f.shape.length-1]]);
+      const p = model.predict(flat);
+      allProbs.push(Array.from(p.dataSync()));
+      f.dispose(); flat.dispose(); p.dispose();
+    }
+  } catch(e) {
+    setStatus('Prediction error: '+e.message,'err');
+    document.getElementById('pred-btn').disabled=false;
+    return;
   }
 
-  // Average all 5 predictions
+  // Average all predictions
   const avgProbs = allProbs[0].map((_,i) =>
     allProbs.reduce((sum,p)=>sum+p[i],0) / allProbs.length
   );
