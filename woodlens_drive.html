@@ -349,7 +349,7 @@ const IMAGE_MIMES = ['image/jpeg','image/png','image/webp','image/bmp'];
 const DATASET_FOLDER_NAME = 'WoodDataset';
 const SAVE_FOLDER_NAME    = 'WoodLens';
 const CONF_THRESHOLD      = 0.55;   // below = uncertain
-const AUG_PER_IMAGE       = 5;      // augmented copies per training image
+const AUG_PER_IMAGE       = 3;      // augmented copies per training image
 const MIN_SAMPLES_BALANCE = 0.5;    // warn if species < 50% of avg
 
 let CLIENT_ID = localStorage.getItem('wl_cid') || '628099960268-1imb5igfssu5ji4pq0rnitr3sq2iaehl.apps.googleusercontent.com';
@@ -518,34 +518,29 @@ function checkReady(){
 function augmentImage(t){
   // t is always rank-4: [1,224,224,3]
   return tf.tidy(()=>{
-    // Work in rank-3 for all ops to avoid any rank confusion
     let img = t.squeeze([0]); // → [224,224,3]
 
-    // Brightness ±25%
-    const bright = (Math.random()-0.5)*0.5;
+    // Mild brightness ±10% only
+    const bright = (Math.random()-0.5)*0.2;
     img = tf.clipByValue(img.add(bright), 0, 1);
 
-    // Contrast 0.65–1.35
-    const factor = 0.65 + Math.random()*0.7;
+    // Mild contrast 0.9–1.1 only
+    const factor = 0.9 + Math.random()*0.2;
     const mean = img.mean();
     img = tf.clipByValue(img.sub(mean).mul(factor).add(mean), 0, 1);
 
-    // Random crop + resize (zoom simulation)
-    const cropFrac = 0.8 + Math.random()*0.2;
+    // Very mild crop 95–100% (almost no zoom, just slight shift)
+    const cropFrac = 0.95 + Math.random()*0.05;
     const ch = Math.floor(224*cropFrac), cw = Math.floor(224*cropFrac);
     const y1 = Math.floor(Math.random()*(224-ch));
     const x1 = Math.floor(Math.random()*(224-cw));
     img = tf.image.resizeBilinear(img.slice([y1,x1,0],[ch,cw,3]),[224,224]);
 
-    // Tiny noise
-    img = tf.clipByValue(img.add(tf.randomNormal([224,224,3],0,0.015)), 0, 1);
+    // Flip only (no noise — noise hurts wood grain texture)
+    if(Math.random()>0.5) img = img.reverse(1); // horizontal
+    if(Math.random()>0.5) img = img.reverse(0); // vertical
 
-    // Manual horizontal flip using reverse (rank-3 safe, no TF flip ops)
-    if(Math.random()>0.5) img = img.reverse(1);
-    // Manual vertical flip
-    if(Math.random()>0.5) img = img.reverse(0);
-
-    return img.expandDims(0); // back to rank-4
+    return img.expandDims(0);
   });
 }
 
@@ -633,6 +628,10 @@ async function doTrain(){
   busy=true;document.getElementById('train-btn').disabled=true;
   setStatus(`Extracting features (×${AUG_PER_IMAGE} augments)…`,'',true);
   const label=S.classes.indexOf(selTrain);
+  // Always add original first, then augmented copies
+  const origF=extractFeat(trainTens);
+  buf.push({data:Array.from(origF.dataSync()),label});origF.dispose();
+  S.counts[selTrain]=(S.counts[selTrain]||0)+1;
   for(let i=0;i<AUG_PER_IMAGE;i++){
     const aug=augmentImage(trainTens);
     const f=extractFeat(aug);aug.dispose();
@@ -665,6 +664,11 @@ async function doBatchTrain(){
     document.getElementById('mq-pct').textContent=Math.round(done/total*100)+'%';
     try{
       const t=await file2tensor(file);
+      // Original first
+      const origF=extractFeat(t);
+      buf.push({data:Array.from(origF.dataSync()),label});origF.dispose();
+      S.counts[selTrain]=(S.counts[selTrain]||0)+1;
+      // Then augmented copies
       for(let i=0;i<AUG_PER_IMAGE;i++){
         const aug=augmentImage(t);
         const f=extractFeat(aug);aug.dispose();
