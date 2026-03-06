@@ -516,39 +516,36 @@ function checkReady(){
 //  IMPROVEMENT 1+9: Heavy augmentation + zoom/crop
 // ══════════════════════════════════════════════
 function augmentImage(t){
+  // t is always rank-4: [1,224,224,3]
   return tf.tidy(()=>{
-    // Keep rank-4 [1,H,W,3] throughout — flipLeftRight/flipUpDown require rank 4
-    let img = t; // already [1,224,224,3]
+    // Work in rank-3 for all ops to avoid any rank confusion
+    let img = t.squeeze([0]); // → [224,224,3]
 
-    // Random horizontal flip (rank 4 required)
-    if(Math.random()>0.5) img=tf.image.flipLeftRight(img);
-    // Random vertical flip (rank 4 required)
-    if(Math.random()>0.5) img=tf.image.flipUpDown(img);
+    // Brightness ±25%
+    const bright = (Math.random()-0.5)*0.5;
+    img = tf.clipByValue(img.add(bright), 0, 1);
 
-    // Random brightness ±25%
-    const bright=(Math.random()-0.5)*0.5;
-    img=tf.clipByValue(img.add(bright),0,1);
+    // Contrast 0.65–1.35
+    const factor = 0.65 + Math.random()*0.7;
+    const mean = img.mean();
+    img = tf.clipByValue(img.sub(mean).mul(factor).add(mean), 0, 1);
 
-    // Random contrast 0.65–1.35
-    const factor=0.65+Math.random()*0.7;
-    const mean=img.mean();
-    img=tf.clipByValue(img.sub(mean).mul(factor).add(mean),0,1);
-
-    // Zoom/crop: squeeze to rank 3 only for slice+resize, then expand back
-    const img3=img.squeeze([0]); // [224,224,3]
-    const [h,w]=img3.shape.slice(0,2);
-    const cropFrac=0.8+Math.random()*0.2;
-    const ch=Math.floor(h*cropFrac), cw=Math.floor(w*cropFrac);
-    const y1=Math.floor(Math.random()*(h-ch));
-    const x1=Math.floor(Math.random()*(w-cw));
-    const cropped=tf.image.resizeBilinear(img3.slice([y1,x1,0],[ch,cw,3]),[224,224]);
-    img=tf.clipByValue(cropped.expandDims(0),0,1);
+    // Random crop + resize (zoom simulation)
+    const cropFrac = 0.8 + Math.random()*0.2;
+    const ch = Math.floor(224*cropFrac), cw = Math.floor(224*cropFrac);
+    const y1 = Math.floor(Math.random()*(224-ch));
+    const x1 = Math.floor(Math.random()*(224-cw));
+    img = tf.image.resizeBilinear(img.slice([y1,x1,0],[ch,cw,3]),[224,224]);
 
     // Tiny noise
-    const noise=tf.randomNormal(img.shape,0,0.015);
-    img=tf.clipByValue(img.add(noise),0,1);
+    img = tf.clipByValue(img.add(tf.randomNormal([224,224,3],0,0.015)), 0, 1);
 
-    return img; // rank 4
+    // Manual horizontal flip using reverse (rank-3 safe, no TF flip ops)
+    if(Math.random()>0.5) img = img.reverse(1);
+    // Manual vertical flip
+    if(Math.random()>0.5) img = img.reverse(0);
+
+    return img.expandDims(0); // back to rank-4
   });
 }
 
