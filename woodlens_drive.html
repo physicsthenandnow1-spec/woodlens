@@ -18,7 +18,10 @@ html,body{height:100%;background:var(--bark);font-family:'DM Mono',monospace;col
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:repeating-linear-gradient(88deg,transparent 0,transparent 22px,rgba(200,136,74,.025) 22px,rgba(200,136,74,.025) 23px),
              repeating-linear-gradient(93deg,transparent 0,transparent 55px,rgba(123,63,26,.03) 55px,rgba(123,63,26,.03) 57px)}
+
 .app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* HEADER */
 header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgba(28,16,8,.75);backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
 .hrow{display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:'DM Serif Display',serif;font-size:24px;color:var(--grain);display:flex;align-items:center;gap:9px}
@@ -28,6 +31,8 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 .dbtn:hover{background:rgba(123,63,26,.45)}
 .dbtn.on{border-color:rgba(127,166,113,.5);background:rgba(61,92,53,.3);color:var(--mosslight)}
 .dbtn svg{width:13px;height:13px;flex-shrink:0}
+
+/* STATUS */
 #sb{margin:10px 18px 0;padding:9px 13px;background:rgba(123,63,26,.12);border:1px solid var(--ring);border-radius:8px;font-size:11px;color:var(--sw);display:flex;align-items:center;gap:8px;min-height:36px;transition:all .3s}
 #sb.ok{color:var(--mosslight);border-color:rgba(127,166,113,.3)}
 #sb.err{color:#E07070;border-color:rgba(224,112,112,.3)}
@@ -35,21 +40,28 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 .spin{width:13px;height:13px;border:2px solid rgba(232,200,154,.15);border-top-color:var(--grain);border-radius:50%;animation:rot .7s linear infinite;flex-shrink:0}
 @keyframes rot{to{transform:rotate(360deg)}}
+
+/* TABS */
 .tabs{display:flex;margin:12px 18px 0;border:1px solid var(--ring);border-radius:10px;overflow:hidden}
 .tb{flex:1;padding:9px 0;background:transparent;border:none;color:var(--sw);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .tb.on{background:var(--hw);color:var(--cream)}
 .tb:not(:last-child){border-right:1px solid var(--ring)}
+
+/* PANELS */
 .panel{display:none;flex-direction:column;padding:16px 18px 60px;gap:14px;animation:up .22s ease}
 .panel.on{display:flex}
 @keyframes up{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--sw);margin-bottom:-5px}
+
+/* UPLOAD ZONE */
 .uz{border:2px dashed var(--ring);border-radius:13px;min-height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;cursor:pointer;transition:all .22s;background:rgba(200,136,74,.03);position:relative;overflow:hidden}
 .uz:hover,.uz.over{border-color:var(--sw);background:rgba(200,136,74,.07)}
 .uz input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
-#multi-queue{background:rgba(200,136,74,.05);border:1px solid var(--ring);border-radius:11px;padding:11px 13px;}
 .uz .pi{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:11px;opacity:.85}
 .uz .ic{font-size:32px;opacity:.4;z-index:1}
 .uz .ht{font-size:11px;color:var(--sw);text-align:center;z-index:1;padding:0 22px;line-height:1.65}
+
+/* DRIVE BROWSER */
 .dbrow{border:1px solid var(--ring);border-radius:11px;overflow:hidden;background:rgba(0,0,0,.18)}
 .dbh{display:flex;align-items:center;gap:7px;padding:9px 11px;border-bottom:1px solid var(--ring);background:rgba(123,63,26,.12)}
 .dbpath{flex:1;font-size:10px;color:var(--sw);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -62,13 +74,19 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 .dbi .fn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dbi .fm{font-size:9px;color:var(--sw);white-space:nowrap}
 .dbe{padding:18px;text-align:center;font-size:11px;color:var(--sw);opacity:.55}
+
+/* CHIPS */
 .cg{display:flex;flex-wrap:wrap;gap:7px}
 .chip{padding:6px 12px;border-radius:20px;border:1px solid var(--ring);background:transparent;color:var(--grain);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;transition:all .17s;white-space:nowrap}
 .chip.on{background:var(--hw);border-color:var(--sw);color:var(--cream)}
+
+/* INPUTS */
 .row{display:flex;gap:7px}
 .inf{flex:1;background:rgba(200,136,74,.06);border:1px solid var(--ring);border-radius:8px;padding:9px 12px;color:var(--cream);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .2s}
 .inf:focus{border-color:var(--sw)}
 .inf::placeholder{color:rgba(232,200,154,.28)}
+
+/* BUTTONS */
 .btn{padding:11px 17px;border-radius:9px;border:none;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:7px}
 .btn-p{background:var(--hw);color:var(--cream);width:100%}
 .btn-p:hover:not(:disabled){background:#963D1A}
@@ -80,20 +98,30 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 .btn-s:hover{background:rgba(123,63,26,.55)}
 .btn-o{background:transparent;color:var(--sw);border:1px solid var(--ring);width:100%}
 .btn-o:hover{background:rgba(200,136,74,.07)}
+
+/* PROGRESS */
 .pw{background:rgba(200,136,74,.08);border-radius:4px;height:4px;overflow:hidden}
 .pf{height:100%;background:linear-gradient(90deg,var(--hw),var(--sw));border-radius:4px;transition:width .4s ease;width:0%}
+
+/* BATCH PROGRESS */
 .brow{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--sw)}
 .bpw{flex:1;height:4px;background:rgba(200,136,74,.09);border-radius:3px;overflow:hidden}
 .bpf{height:100%;background:var(--sw);border-radius:3px;transition:width .3s}
+
+/* LOG */
 .log{background:rgba(0,0,0,.28);border:1px solid var(--ring);border-radius:9px;padding:9px 11px;font-size:10px;color:var(--sw);max-height:100px;overflow-y:auto;line-height:1.9}
 .ll.hi{color:var(--mosslight)}
 .ll.w{color:#E07070}
+
+/* SAMPLE BARS */
 .sbl{display:flex;flex-direction:column;gap:5px}
 .sbr{display:flex;align-items:center;gap:8px;font-size:11px}
 .sbn{flex:1;color:var(--grain);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sbt{flex:2;height:3px;background:rgba(200,136,74,.1);border-radius:3px}
 .sbf{height:100%;border-radius:3px;background:var(--sw);transition:width .4s}
 .sbc{min-width:24px;text-align:right;color:var(--sw);font-size:10px}
+
+/* RESULT */
 .rc{background:rgba(123,63,26,.16);border:1px solid var(--ring);border-radius:13px;padding:16px;display:none;flex-direction:column;gap:13px;animation:up .28s ease}
 .rc.on{display:flex}
 .rh{display:flex;align-items:center;gap:13px}
@@ -109,15 +137,22 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 .cp{min-width:32px;text-align:right;color:var(--sw)}
 .fsep{height:1px;background:var(--ring)}
 .flbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--sw)}
+
+/* STATS */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .sc{background:rgba(200,136,74,.06);border:1px solid var(--ring);border-radius:9px;padding:13px}
 .sv{font-family:'DM Serif Display',serif;font-size:26px;color:var(--grain);line-height:1}
 .sl{font-size:9px;letter-spacing:1.5px;color:var(--sw);margin-top:3px;text-transform:uppercase}
+
+/* SYNC ROW */
 .syncr{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--sw);padding:10px 13px;background:rgba(200,136,74,.05);border:1px solid var(--ring);border-radius:8px}
 .synd{width:7px;height:7px;border-radius:50%;background:var(--sw);flex-shrink:0}
 .synd.ok{background:var(--mosslight)}
+
 .div{height:1px;background:var(--ring)}
 .empty{text-align:center;color:var(--sw);font-size:11px;padding:16px;opacity:.55}
+
+/* MODAL */
 .mbg{position:fixed;inset:0;background:rgba(8,4,2,.88);z-index:100;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
 .mbg.on{display:flex}
 .modal{background:#281408;border:1px solid var(--ring2);border-radius:18px 18px 0 0;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;padding:22px 18px 44px;display:flex;flex-direction:column;gap:13px}
@@ -127,6 +162,7 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 .mdesc b{color:var(--grain)}
 .mdesc code{background:rgba(200,136,74,.12);padding:1px 6px;border-radius:4px;font-size:10px;color:var(--grain)}
 .mdesc .step{background:rgba(123,63,26,.18);border-left:2px solid var(--sw);border-radius:0 6px 6px 0;padding:10px 12px;margin:6px 0}
+
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--ring);border-radius:3px}
@@ -135,6 +171,7 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
 <body>
 <div class="app">
 
+<!-- HEADER -->
 <header>
   <div class="hrow">
     <div>
@@ -148,16 +185,18 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
   </div>
 </header>
 
+<!-- STATUS -->
 <div id="sb"><div class="dot"></div><span id="st">Initializing…</span></div>
 
+<!-- TABS -->
 <div class="tabs">
-  <button class="tb on" onclick="goTab('train',this)">TRAIN</button>
-  <button class="tb"    onclick="goTab('test',this)">TEST</button>
-  <button class="tb"    onclick="goTab('drive',this)">DRIVE</button>
-  <button class="tb"    onclick="goTab('data',this)">DATA</button>
+  <button class="tb on"  onclick="goTab('train',this)">TRAIN</button>
+  <button class="tb"     onclick="goTab('test',this)">TEST</button>
+  <button class="tb"     onclick="goTab('drive',this)">DRIVE</button>
+  <button class="tb"     onclick="goTab('data',this)">DATA</button>
 </div>
 
-<!-- TRAIN -->
+<!-- ══════════ TRAIN ══════════ -->
 <div class="panel on" id="panel-train">
   <div class="lbl">Wood Species</div>
   <div class="cg" id="train-chips"></div>
@@ -165,18 +204,14 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
     <input class="inf" id="new-cls" placeholder="Add new species…" maxlength="30" onkeydown="if(event.key==='Enter')addCls()"/>
     <button class="btn btn-s" onclick="addCls()">+ ADD</button>
   </div>
+
   <div class="lbl">Image — Local Upload</div>
   <div class="uz" id="tz">
-    <input type="file" accept="image/*" multiple onchange="trainLocal(event)"/>
+    <input type="file" accept="image/*" onchange="trainLocal(event)"/>
     <div class="ic">📷</div>
-    <div class="ht">Tap to choose one or multiple photos<br/><span style="font-size:10px;opacity:.55">Hold to select multiple • or pick from Drive below</span></div>
+    <div class="ht">Tap to choose a cross-section photo<br/><span style="font-size:10px;opacity:.55">or pick from Drive browser below</span></div>
   </div>
-  <!-- Multi-image queue display -->
-  <div id="multi-queue" style="display:none">
-    <div style="font-size:10px;color:var(--sw);margin-bottom:6px">SELECTED IMAGES</div>
-    <div id="multi-thumbs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
-    <div class="brow"><span id="mq-txt">0 images ready</span><div class="bpw"><div class="bpf" id="mq-fill" style="width:0%"></div></div><span id="mq-pct"></span></div>
-  </div>
+
   <div class="lbl" style="margin-bottom:4px">Browse Google Drive</div>
   <div class="dbrow">
     <div class="dbh">
@@ -186,18 +221,20 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
     </div>
     <div class="dblist" id="tbl"><div class="dbe">Connect Google Drive to browse your images</div></div>
   </div>
+
   <div id="batch-prog" style="display:none">
     <div class="brow"><span id="b-txt">Importing…</span><div class="bpw"><div class="bpf" id="b-fill" style="width:0%"></div></div><span id="b-pct">0%</span></div>
   </div>
+
   <div class="pw"><div class="pf" id="tprog"></div></div>
   <div class="log" id="tlog"><div class="ll">Ready. Choose a species and an image to begin training.</div></div>
   <button class="btn btn-p" id="train-btn" onclick="doTrain()" disabled>🌲 TRAIN ON THIS IMAGE</button>
-  <button class="btn btn-g" id="batch-train-btn" onclick="doBatchTrain()" disabled style="display:none">🌲 TRAIN ON ALL SELECTED IMAGES</button>
+
   <div class="lbl">Samples per Species</div>
   <div class="sbl" id="train-sbl"><div class="empty">No samples yet.</div></div>
 </div>
 
-<!-- TEST -->
+<!-- ══════════ TEST ══════════ -->
 <div class="panel" id="panel-test">
   <div class="lbl">Image — Local Upload</div>
   <div class="uz" id="tstz">
@@ -205,6 +242,7 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
     <div class="ic">🔍</div>
     <div class="ht">Tap to select a wood cross-section<br/><span style="font-size:10px;opacity:.55">or pick from Drive below</span></div>
   </div>
+
   <div class="lbl" style="margin-bottom:4px">Browse Google Drive</div>
   <div class="dbrow">
     <div class="dbh">
@@ -214,7 +252,9 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
     </div>
     <div class="dblist" id="ebl"><div class="dbe">Connect Google Drive to browse your images</div></div>
   </div>
+
   <button class="btn btn-g" id="pred-btn" onclick="doPred()" disabled>✦ IDENTIFY WOOD</button>
+
   <div class="rc" id="rc">
     <div class="rh">
       <div class="rb">🪵</div>
@@ -228,7 +268,7 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
   </div>
 </div>
 
-<!-- DRIVE -->
+<!-- ══════════ DRIVE ══════════ -->
 <div class="panel" id="panel-drive">
   <div class="lbl">Connection</div>
   <div class="syncr"><div class="synd" id="synd"></div><span id="synt">Not connected</span></div>
@@ -236,29 +276,35 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 20L1 11l4-7h14l4 7-5.5 9H6.5zm1.7-2h7.6l3.5-6H4.7l3.5 6zM12 4L8.5 10h7L12 4z"/></svg>
     CONNECT GOOGLE DRIVE
   </button>
+
   <div class="div"></div>
   <div class="lbl">Auto-Import WoodDataset</div>
-  <div style="font-size:11px;color:var(--sw);line-height:1.75">Scans your <b style="color:var(--grain)">WoodDataset/</b> folder on Drive. Each subfolder becomes a species class and all images are imported automatically.</div>
+  <div style="font-size:11px;color:var(--sw);line-height:1.75">
+    Scans your <b style="color:var(--grain)">WoodDataset/</b> folder on Drive. Each subfolder becomes a species class and all images are imported as training samples automatically.
+  </div>
   <button class="btn btn-s" onclick="autoImport()" style="width:100%">📂 SCAN WOODDATASET FOLDER</button>
+
   <div id="ai-prog" style="display:none">
     <div class="brow"><span id="ai-txt">Scanning…</span><div class="bpw"><div class="bpf" id="ai-fill" style="width:0%"></div></div><span id="ai-pct">0%</span></div>
   </div>
+
   <div class="div"></div>
   <div class="lbl">Cloud Sync</div>
   <div style="font-size:11px;color:var(--sw);line-height:1.75">Model weights, training data, and test results are saved to <b style="color:var(--grain)">WoodLens/</b> on your Drive. Auto-saves after every training session.</div>
   <button class="btn btn-s" onclick="cloudSync('save')" style="width:100%">☁ SAVE TO DRIVE NOW</button>
   <button class="btn btn-s" onclick="cloudSync('load')" style="width:100%">⬇ RESTORE FROM DRIVE</button>
+
   <div class="div"></div>
   <div class="lbl">OAuth Client ID</div>
-  <div style="font-size:11px;color:var(--sw);margin-bottom:4px">Your Google Cloud OAuth Client ID:</div>
+  <div style="font-size:11px;color:var(--sw);margin-bottom:4px">Paste your Google Cloud OAuth Client ID:</div>
   <div class="row">
     <input class="inf" id="cid-inp" placeholder="xxxx.apps.googleusercontent.com" style="font-size:10px"/>
     <button class="btn btn-s" onclick="saveCID()">SAVE</button>
   </div>
-  <button class="btn btn-o" onclick="showGuide()">📋 HOW TO GET A CLIENT ID</button>
+  <button class="btn btn-o" onclick="showGuide()">📋 HOW TO GET A CLIENT ID (5 min setup)</button>
 </div>
 
-<!-- DATA -->
+<!-- ══════════ DATA ══════════ -->
 <div class="panel" id="panel-data">
   <div class="lbl">Model Stats</div>
   <div class="sg">
@@ -276,9 +322,9 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
   <button onclick="resetAll()" style="width:100%;padding:10px 0;background:rgba(200,70,70,.1);color:#E07070;border:1px solid rgba(200,70,70,.22);border-radius:9px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer">⚠ RESET ALL DATA</button>
 </div>
 
-</div>
+</div><!-- .app -->
 
-<!-- GUIDE MODAL -->
+<!-- SETUP GUIDE MODAL -->
 <div class="mbg" id="guide" onclick="if(event.target===this)this.classList.remove('on')">
   <div class="modal">
     <div class="mhandle"></div>
@@ -288,36 +334,54 @@ header{padding:22px 18px 14px;border-bottom:1px solid var(--ring);background:rgb
       <div class="step"><b>1. Create a Google Cloud Project</b><br/>Go to <b>console.cloud.google.com</b> → New Project → Name it <b>WoodLens</b> → Create.</div>
       <div class="step"><b>2. Enable Google Drive API</b><br/>APIs &amp; Services → Library → search <b>Google Drive API</b> → Enable.</div>
       <div class="step"><b>3. Configure OAuth Consent Screen</b><br/>APIs &amp; Services → OAuth consent screen → External → Create.<br/>App name: <b>WoodLens</b> · Add your Gmail as a Test user.<br/>Scopes: add <code>drive.readonly</code> and <code>drive.file</code> → Save.</div>
-      <div class="step"><b>4. Create OAuth Client ID</b><br/>Credentials → Create Credentials → OAuth client ID.<br/>Type: <b>Web application</b>.<br/>Authorized JS origins: <code>https://yourname.github.io</code><br/>→ Create → Copy the <b>Client ID</b>.</div>
-      <div class="step"><b>5. Paste into WoodLens</b><br/>DRIVE tab → paste Client ID → SAVE → CONNECT DRIVE.</div>
+      <div class="step"><b>4. Create OAuth Client ID</b><br/>Credentials → Create Credentials → OAuth client ID.<br/>Type: <b>Web application</b>.<br/>Authorized JS origins: add the URL where you open this file<br/>(e.g. <code>https://yourname.github.io</code> or <code>http://localhost:3000</code>)<br/>→ Create → Copy the <b>Client ID</b>.</div>
+      <div class="step"><b>5. Paste into WoodLens</b><br/>DRIVE tab → paste Client ID into the field → SAVE → CONNECT DRIVE.</div>
+      <br/>
+      <b>How to host this file (free options):</b><br/>
+      • <b>GitHub Pages</b>: upload this HTML to a repo → Settings → Pages → enable<br/>
+      • <b>Google Drive</b> itself: upload &amp; open with Google Sites / share as web app<br/>
+      • <b>VS Code Live Server</b>: open folder → Go Live → use <code>http://localhost:5500</code><br/>
+      • <b>Android Termux</b>: <code>npx serve .</code> → open <code>http://localhost:3000</code>
     </div>
     <button class="btn btn-p" onclick="document.getElementById('guide').classList.remove('on')">GOT IT ✓</button>
   </div>
 </div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────
+// ─────────────────────────────────────────────
+//  CONFIG
+// ─────────────────────────────────────────────
 const IMAGE_MIMES = ['image/jpeg','image/png','image/webp','image/bmp'];
 const DATASET_FOLDER_NAME = 'WoodDataset';
 const SAVE_FOLDER_NAME    = 'WoodLens';
+
 let CLIENT_ID = localStorage.getItem('wl_cid') || '628099960268-1imb5igfssu5ji4pq0rnitr3sq2iaehl.apps.googleusercontent.com';
 
-// ─── STATE ────────────────────────────────────
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
 let S = { classes:[], counts:{}, sessions:0, lastAcc:null };
-let buf = [];
+let buf = [];     // [{data:[],label:n}]
 let model = null;
-let feat  = null;
+let feat  = null; // MobileNetV2 feature extractor
 let busy  = false;
+
 let trainTens = null;
 let testTens  = null;
 let selTrain  = null;
 let feedCls   = null;
+
+// Drive
 let token = null;
 let gis   = null;
+
+// Browser nav
 let stacks = { train:[], test:[] };
 let curDir  = { train:{id:'root',name:'My Drive'}, test:{id:'root',name:'My Drive'} };
 
-// ─── INDEXEDDB ────────────────────────────────
+// ─────────────────────────────────────────────
+//  INDEXEDDB
+// ─────────────────────────────────────────────
 let idb;
 async function openIDB() {
   return new Promise((res,rej) => {
@@ -358,7 +422,9 @@ async function loadModelLocal() {
   } catch(e) { model=null; }
 }
 
-// ─── UI HELPERS ───────────────────────────────
+// ─────────────────────────────────────────────
+//  UI HELPERS
+// ─────────────────────────────────────────────
 function setStatus(msg,cls='',loading=false) {
   document.getElementById('st').textContent=msg;
   const el=document.getElementById('sb'); el.className=cls;
@@ -371,37 +437,43 @@ function log(msg,cls='') {
   el.appendChild(d); el.scrollTop=el.scrollHeight;
 }
 function setProg(n) { document.getElementById('tprog').style.width=n+'%'; }
-
-// ── FIX: keep file input on top after preview so tapping still works ──
 function showPrev(zoneId,src) {
   const z=document.getElementById(zoneId);
   z.querySelector('.ic')?.remove(); z.querySelector('.ht')?.remove();
   let p=z.querySelector('.pi'); if(!p){p=document.createElement('img');p.className='pi';z.appendChild(p);}
   p.src=src;
+  // Keep file input on top so user can tap again to change image
   const inp=z.querySelector('input[type=file]');
-  if(inp){ inp.style.zIndex='10'; inp.value=''; }
+  if(inp) { inp.style.zIndex='10'; inp.value=''; }
 }
 
-// ─── TABS ─────────────────────────────────────
+// ─────────────────────────────────────────────
+//  TABS
+// ─────────────────────────────────────────────
 function goTab(name,btn) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
   document.getElementById('panel-'+name).classList.add('on');
   btn.classList.add('on');
   if(name==='data') refreshData();
+  // Auto-rebuild model if switching to test and model is missing but samples exist
   if(name==='test' && !model && buf.length>=2 && S.classes.length>=2) {
     setStatus('Rebuilding model from saved samples…','',true);
     retrain().then(()=>{ if(model) setStatus('Model ready! Upload an image to test.','ok'); });
   }
 }
 
-// ─── CLASSES / CHIPS ──────────────────────────
-function chips(id,sel,cb) {
+// ─────────────────────────────────────────────
+//  CLASSES / CHIPS
+// ─────────────────────────────────────────────
+function chips(id, sel, cb) {
   const el=document.getElementById(id); el.innerHTML='';
   S.classes.forEach(c=>{
     const b=document.createElement('button');
-    b.className='chip'+(sel===c?' on':''); b.textContent=c;
-    b.onclick=()=>cb(c); el.appendChild(b);
+    b.className='chip'+(sel===c?' on':'');
+    b.textContent=c;
+    b.onclick=()=>cb(c);
+    el.appendChild(b);
   });
 }
 function renderAll() {
@@ -430,52 +502,20 @@ async function addCls() {
   S.classes.push(nm); S.counts[nm]=0; await saveLocal(); inp.value='';
   renderAll(); log('Added class: '+nm);
 }
-function checkReady() {
-  document.getElementById('train-btn').disabled = !(selTrain && trainTens);
-  const batchBtn = document.getElementById('batch-train-btn');
-  if(trainQueue.length > 0) batchBtn.disabled = !selTrain;
-}
+function checkReady() { document.getElementById('train-btn').disabled=!(selTrain&&trainTens); }
 
-// ─── IMAGE AUGMENTATION ───────────────────────
-// Heavy augmentation — brightness, contrast, flip, crop simulation
+// ─────────────────────────────────────────────
+//  IMAGE HELPERS
+// ─────────────────────────────────────────────
 function augmentImage(t) {
   return tf.tidy(()=>{
-    let img = t.squeeze([0]); // [224,224,3]
-
-    // Random horizontal flip
-    if(Math.random()>0.5) img = tf.image.flipLeftRight(img);
-    // Random vertical flip
-    if(Math.random()>0.5) img = tf.image.flipUpDown(img);
-
-    // Random brightness ±20%
-    const bright = (Math.random()-0.5)*0.4;
-    img = tf.clipByValue(img.add(bright), 0, 1);
-
-    // Random contrast (0.7 to 1.3)
-    const factor = 0.7 + Math.random()*0.6;
-    const mean = img.mean();
-    img = tf.clipByValue(img.sub(mean).mul(factor).add(mean), 0, 1);
-
-    // Random noise
-    const noise = tf.randomNormal(img.shape, 0, 0.02);
-    img = tf.clipByValue(img.add(noise), 0, 1);
-
-    return img.expandDims(0);
+    let img=t;
+    if(Math.random()>0.5) img=tf.image.flipLeftRight(img.squeeze([0])).expandDims(0);
+    if(Math.random()>0.5) img=tf.image.flipUpDown(img.squeeze([0])).expandDims(0);
+    return img;
   });
 }
 
-// Generate multiple augmented versions of a single feature vector
-function augmentFeatures(featData, n=4) {
-  // Apply small Gaussian noise to feature space directly
-  const results = [featData];
-  for(let i=1;i<n;i++){
-    const noisy = featData.map(v => v + (Math.random()-0.5)*0.05);
-    results.push(noisy);
-  }
-  return results;
-}
-
-// ─── IMAGE TO TENSOR ──────────────────────────
 function file2tensor(file) {
   return new Promise(res=>{
     const img=new Image(); img.onload=()=>{
@@ -485,121 +525,12 @@ function file2tensor(file) {
     img.src=URL.createObjectURL(file);
   });
 }
-
-// ─── LOCAL FILE HANDLERS ──────────────────────
-// Queue of files selected for batch training
-let trainQueue = [];
-
 async function trainLocal(e) {
-  const files = Array.from(e.target.files);
-  if(!files.length) return;
-
-  if(files.length === 1) {
-    // Single image — original behaviour
-    trainQueue = [];
-    showPrev('tz', URL.createObjectURL(files[0]));
-    if(trainTens) trainTens.dispose();
-    trainTens = await file2tensor(files[0]);
-    document.getElementById('multi-queue').style.display = 'none';
-    document.getElementById('train-btn').style.display = '';
-    document.getElementById('batch-train-btn').style.display = 'none';
-    checkReady();
-  } else {
-    // Multiple images — show queue
-    trainQueue = files;
-    trainTens = null;
-    document.getElementById('train-btn').style.display = 'none';
-
-    // Show thumbnails
-    const thumbs = document.getElementById('multi-thumbs');
-    thumbs.innerHTML = '';
-    files.forEach(f => {
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(f);
-      img.style.cssText = 'width:52px;height:52px;object-fit:cover;border-radius:7px;border:1px solid rgba(200,136,74,.3)';
-      thumbs.appendChild(img);
-    });
-
-    document.getElementById('mq-txt').textContent = `${files.length} images ready to train`;
-    document.getElementById('mq-fill').style.width = '0%';
-    document.getElementById('mq-pct').textContent = '';
-    document.getElementById('multi-queue').style.display = 'block';
-
-    // Show batch train button — enabled only if species selected
-    const batchBtn = document.getElementById('batch-train-btn');
-    batchBtn.style.display = '';
-    batchBtn.disabled = !selTrain;
-
-    // Also update preview zone to show count
-    const z = document.getElementById('tz');
-    z.querySelector('.ic')?.remove(); z.querySelector('.ht')?.remove();
-    let p = z.querySelector('.pi');
-    if(p) p.remove();
-    const ic = document.createElement('div'); ic.className='ic'; ic.textContent='📷'; z.appendChild(ic);
-    const ht = document.createElement('div'); ht.className='ht';
-    ht.innerHTML = `<b style="color:var(--grain);font-size:13px">${files.length} images selected</b><br/><span style="font-size:10px;opacity:.55">Tap again to change selection</span>`;
-    z.appendChild(ht);
-    const inp = z.querySelector('input[type=file]');
-    if(inp){ inp.style.zIndex='10'; }
-  }
-}
-
-async function doBatchTrain() {
-  if(busy || !selTrain || !trainQueue.length) return;
-  if(S.classes.length < 2){ log('Need ≥ 2 species to start training.','w'); return; }
-  busy = true;
-  document.getElementById('batch-train-btn').disabled = true;
-  document.getElementById('train-btn').disabled = true;
-  const label = S.classes.indexOf(selTrain);
-  const total = trainQueue.length;
-  let done = 0;
-
-  log(`Batch training: ${total} images × 5 augments = ${total*5} samples for ${selTrain}…`, 'hi');
-
-  for(const file of trainQueue) {
-    setStatus(`Image ${done+1}/${total} → extracting 5 augmented versions…`, '', true);
-    document.getElementById('mq-txt').textContent = `Image ${done+1} of ${total} (×5 augments each)`;
-    document.getElementById('mq-fill').style.width = (done/total*100)+'%';
-    document.getElementById('mq-pct').textContent = Math.round(done/total*100)+'%';
-
-    try {
-      const t = await file2tensor(file);
-      // 5 augmented versions per image
-      for(let i=0;i<5;i++){
-        const aug = augmentImage(t);
-        const f = extractFeat(aug);
-        aug.dispose();
-        buf.push({data: Array.from(f.dataSync()), label});
-        f.dispose();
-        // Update count for each augmented sample
-        S.counts[selTrain] = (S.counts[selTrain]||0) + 1;
-      }
-      t.dispose();
-      done++;
-      // Update bars live
-      renderSbars();
-    } catch(e) {
-      log(`Skipped ${file.name}: ${e.message}`, 'w');
-    }
-  }
-
-  document.getElementById('mq-fill').style.width = '100%';
-  document.getElementById('mq-pct').textContent = '100%';
-  document.getElementById('mq-txt').textContent = `✔ ${done} images × 5 = ${done*5} samples added!`;
-
-  await saveLocal(); renderAll();
-  log(`✔ Batch done! Added ${done*5} samples for ${selTrain}. Total buffer: ${buf.length}`, 'hi');
-
-  // Retrain once after all images
-  await retrain();
-
-  // Reset
-  trainQueue = [];
-  busy = false;
-  document.getElementById('batch-train-btn').disabled = false;
-  document.getElementById('batch-train-btn').style.display = 'none';
-  document.getElementById('train-btn').style.display = '';
-  document.getElementById('multi-queue').style.display = 'none';
+  const f=e.target.files[0]; if(!f)return;
+  showPrev('tz',URL.createObjectURL(f));
+  if(trainTens)trainTens.dispose();
+  trainTens=await file2tensor(f);
+  checkReady();
 }
 async function testLocal(e) {
   const f=e.target.files[0]; if(!f)return;
@@ -610,7 +541,9 @@ async function testLocal(e) {
   document.getElementById('rc').classList.remove('on');
 }
 
-// ─── FEATURE EXTRACTOR ────────────────────────
+// ─────────────────────────────────────────────
+//  FEATURE EXTRACTOR
+// ─────────────────────────────────────────────
 async function loadFeat() {
   setStatus('Loading MobileNetV2 backbone…','',true);
   feat=await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_100_224/feature_vector/3/default/1',{fromTFHub:true});
@@ -620,25 +553,21 @@ function extractFeat(t) {
   return tf.tidy(()=>feat.predict(t.mul(255)));
 }
 
-// ─── TRAIN ────────────────────────────────────
+// ─────────────────────────────────────────────
+//  TRAIN
+// ─────────────────────────────────────────────
 async function doTrain() {
   if(busy||!selTrain||!trainTens)return;
   if(S.classes.length<2){log('Need ≥ 2 species to start training.','w');return;}
   busy=true; document.getElementById('train-btn').disabled=true;
-  setStatus('Extracting features + augmenting…','',true);
-  const label = S.classes.indexOf(selTrain);
-
-  // Extract features from 5 augmented versions of the image
-  for(let i=0;i<5;i++){
-    const aug = augmentImage(trainTens);
-    const f = extractFeat(aug);
-    aug.dispose();
-    buf.push({data:Array.from(f.dataSync()), label});
-    f.dispose();
-    S.counts[selTrain]=(S.counts[selTrain]||0)+1;
-  }
-  await saveLocal(); renderAll();
-  log(`Added 5 augmented samples for ${selTrain}. Total samples: ${buf.length}`);
+  setStatus('Extracting features…','',true);
+  const aug=augmentImage(trainTens);
+  const f=extractFeat(aug);
+  aug.dispose();
+  buf.push({data:Array.from(f.dataSync()),label:S.classes.indexOf(selTrain)});
+  f.dispose();
+  S.counts[selTrain]=(S.counts[selTrain]||0)+1;
+  await saveLocal(); renderAll(); log(`Sample added for ${selTrain}. Total: ${buf.length}`);
   await retrain();
   busy=false; document.getElementById('train-btn').disabled=false;
 }
@@ -648,74 +577,38 @@ async function retrain() {
   if(buf.length<n){setStatus(`Need more samples (${buf.length}/${n} min)`,'');return;}
   setStatus('Training classifier…','',true); setProg(8);
   const fs=buf[0].data.length;
-
-  // Build tensors
   const xs=tf.tensor2d(buf.map(s=>s.data),[buf.length,fs]);
-
-  // Label smoothing: 0.9 for correct class, 0.1/(n-1) for others — reduces overconfidence
-  const smooth = 0.1;
-  const rawLabels = buf.map(s=>s.label);
-  const smoothed = rawLabels.map(l=>{
-    const row = new Array(n).fill(smooth/(n-1));
-    row[l] = 1 - smooth;
-    return row;
-  });
-  const ys = tf.tensor2d(smoothed, [buf.length, n]);
-
+  const ys=tf.oneHot(tf.tensor1d(buf.map(s=>s.label),'int32'),n);
   if(model)try{model.dispose()}catch(e){}
   model=tf.sequential();
-  model.add(tf.layers.dense({inputShape:[fs],units:512,activation:'relu',
-    kernelRegularizer:tf.regularizers.l2({l2:0.0005})}));
+  model.add(tf.layers.dense({inputShape:[fs],units:512,activation:'relu'}));
   model.add(tf.layers.batchNormalization());
-  model.add(tf.layers.dropout({rate:0.35}));
-  model.add(tf.layers.dense({units:256,activation:'relu',
-    kernelRegularizer:tf.regularizers.l2({l2:0.0005})}));
-  model.add(tf.layers.batchNormalization());
-  model.add(tf.layers.dropout({rate:0.25}));
-  model.add(tf.layers.dense({units:128,activation:'relu'}));
+  model.add(tf.layers.dropout({rate:0.4}));
+  model.add(tf.layers.dense({units:256,activation:'relu'}));
   model.add(tf.layers.dense({units:n,activation:'softmax'}));
-
-  // Use lower LR for small datasets — less overfitting
-  const lr = buf.length < 100 ? 0.0005 : 0.001;
-  model.compile({optimizer:tf.train.adam(lr),loss:'categoricalCrossentropy',metrics:['accuracy']});
-
-  // More epochs for small datasets
-  const ep = buf.length < 50 ? 80 : Math.min(60, Math.max(30, buf.length*2));
-  let la=0, bestAcc=0, patience=0;
-
-  await model.fit(xs,ys,{
-    epochs:ep,
-    batchSize:Math.min(16,buf.length),
-    shuffle:true,
-    validationSplit: buf.length>20 ? 0.1 : 0,
-    callbacks:{
-      onEpochEnd:(i,lg)=>{
-        setProg(8+(i+1)/ep*87);
-        la=lg.acc;
-        // Early stopping — stop if not improving for 15 epochs
-        if(la>bestAcc){bestAcc=la;patience=0;}
-        else patience++;
-        if(patience>15 && i>20) return true; // stop
-      }
-    }
+  model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
+  const ep=Math.min(60,Math.max(20,buf.length*3));
+  let la=0;
+  await model.fit(xs,ys,{epochs:ep,batchSize:Math.min(16,buf.length),shuffle:true,
+    callbacks:{onEpochEnd:(i,lg)=>{setProg(8+(i+1)/ep*87);la=lg.acc;}}
   });
   xs.dispose(); ys.dispose(); setProg(100);
-  S.sessions++; S.lastAcc=(bestAcc*100).toFixed(1)+'%';
+  S.sessions++; S.lastAcc=(la*100).toFixed(1)+'%';
   await saveLocal(); await saveModelLocal();
-  log(`✔ Training done! Best accuracy: ${S.lastAcc} (${buf.length} samples)`,'hi');
-  if(bestAcc<0.7) log('⚠ Accuracy below 70% — add more images per species for better results','w');
+  log(`✔ Training done! Accuracy: ${S.lastAcc}`,'hi');
   setStatus(`Done! Accuracy: ${S.lastAcc}`,'ok');
   setTimeout(()=>setProg(0),1200);
   if(token) cloudSync('save');
 }
 
-// ─── PREDICT ──────────────────────────────────
-const CONF_THRESHOLD = 0.55; // below this = uncertain
-
+// ─────────────────────────────────────────────
+//  PREDICT
+// ─────────────────────────────────────────────
 async function doPred() {
   if(!testTens){setStatus('No image loaded.','err');return;}
   if(!model){
-    if(buf.length>=2&&S.classes.length>=2){
+    // Try to retrain from buffer if we have samples
+    if(buf.length>=2 && S.classes.length>=2){
       setStatus('Rebuilding model from saved samples…','',true);
       await retrain();
       if(!model){setStatus('Model rebuild failed. Try RESTORE FROM DRIVE.','err');return;}
@@ -726,39 +619,15 @@ async function doPred() {
   }
   setStatus('Analyzing…','',true);
   document.getElementById('pred-btn').disabled=true;
-
-  // Test-time augmentation: run 3 versions, average predictions
-  const allProbs = [];
-  try {
-    for(let i=0;i<3;i++){
-      const aug = i===0 ? testTens : augmentImage(testTens);
-      const f = extractFeat(aug);
-      if(i!==0) aug.dispose();
-      const flat = f.reshape([1,f.shape[f.shape.length-1]]);
-      const p = model.predict(flat);
-      allProbs.push(Array.from(p.dataSync()));
-      f.dispose(); flat.dispose(); p.dispose();
-    }
-  } catch(e) {
-    setStatus('Prediction error: '+e.message,'err');
-    document.getElementById('pred-btn').disabled=false;
-    return;
-  }
-
-  // Average all predictions
-  const avgProbs = allProbs[0].map((_,i) =>
-    allProbs.reduce((sum,p)=>sum+p[i],0) / allProbs.length
-  );
-
-  const sorted=avgProbs.map((v,i)=>({cls:S.classes[i],p:v})).sort((a,b)=>b.p-a.p);
+  const f=extractFeat(testTens);
+  const flat=f.reshape([1,f.shape[f.shape.length-1]]);
+  const p=model.predict(flat);
+  const probs=Array.from(p.dataSync());
+  f.dispose(); flat.dispose(); p.dispose();
+  const sorted=probs.map((v,i)=>({cls:S.classes[i],p:v})).sort((a,b)=>b.p-a.p);
   const top=sorted[0];
-  const isUncertain = top.p < CONF_THRESHOLD;
-
-  document.getElementById('rn').textContent = isUncertain ? '❓ Uncertain' : top.cls;
-  document.getElementById('rk').textContent = isUncertain
-    ? `Low confidence (${(top.p*100).toFixed(1)}%) — best guess: ${top.cls}. Add more training images!`
-    : `Confidence: ${(top.p*100).toFixed(1)}%`;
-
+  document.getElementById('rn').textContent=top.cls;
+  document.getElementById('rk').textContent=`Confidence: ${(top.p*100).toFixed(1)}%`;
   const bel=document.getElementById('rbars'); bel.innerHTML='';
   sorted.forEach((it,i)=>{
     const r=document.createElement('div'); r.className='cr';
@@ -766,11 +635,7 @@ async function doPred() {
     bel.appendChild(r);
   });
   document.getElementById('rc').classList.add('on');
-  if(isUncertain){
-    setStatus(`⚠ Uncertain (${(top.p*100).toFixed(1)}%) — add more training images`,'err');
-  } else {
-    setStatus(`Identified: ${top.cls} (${(top.p*100).toFixed(1)}%)`,'ok');
-  }
+  setStatus(`Identified: ${top.cls} (${(top.p*100).toFixed(1)}%)`,'ok');
   feedCls=top.cls; renderAll();
   document.getElementById('fb-btn').disabled=false;
   document.getElementById('pred-btn').disabled=false;
@@ -789,7 +654,9 @@ async function doFeedback() {
   await retrain();
 }
 
-// ─── GOOGLE DRIVE AUTH ────────────────────────
+// ─────────────────────────────────────────────
+//  GOOGLE DRIVE AUTH
+// ─────────────────────────────────────────────
 function initGIS() {
   if(!CLIENT_ID||typeof google==='undefined')return;
   gis=google.accounts.oauth2.initTokenClient({
@@ -837,30 +704,38 @@ function saveCID() {
   setStatus('Client ID saved. Now connect Drive.','ok');
 }
 
-// ─── DRIVE BROWSER ────────────────────────────
-function setEmpty(id){document.getElementById(id).innerHTML='<div class="dbe">Connect Google Drive to browse</div>';}
-function loadBrowsers(){loadDir('train','root','My Drive');loadDir('test','root','My Drive');}
+// ─────────────────────────────────────────────
+//  DRIVE FILE BROWSER
+// ─────────────────────────────────────────────
+function setEmpty(id) { document.getElementById(id).innerHTML='<div class="dbe">Connect Google Drive to browse</div>'; }
+
+function loadBrowsers() {
+  loadDir('train','root','My Drive');
+  loadDir('test','root','My Drive');
+}
 
 async function loadDir(w,fid,fname) {
-  const listId=w==='train'?'tbl':'ebl'; const pathId=w==='train'?'tp':'ep';
+  const listId = w==='train'?'tbl':'ebl';
+  const pathId = w==='train'?'tp':'ep';
   const list=document.getElementById(listId); const path=document.getElementById(pathId);
   list.innerHTML=`<div class="dbe" style="display:flex;align-items:center;gap:8px"><div class="spin"></div>Loading…</div>`;
   path.textContent=fname; curDir[w]={id:fid,name:fname};
   try {
     const q=`'${fid}' in parents and trashed=false and (mimeType='application/vnd.google-apps.folder' or ${IMAGE_MIMES.map(m=>`mimeType='${m}'`).join(' or ')})`;
     const res=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(q)}&fields=files(id,name,mimeType,size)&orderBy=folder,name&pageSize=200`);
-    const files=res.files||[]; list.innerHTML='';
+    const files=res.files||[];
+    list.innerHTML='';
     if(!files.length){list.innerHTML='<div class="dbe">Empty folder</div>';return;}
     files.forEach(f=>{
       const isF=f.mimeType==='application/vnd.google-apps.folder';
       const isI=IMAGE_MIMES.includes(f.mimeType);
       const item=document.createElement('div'); item.className='dbi';
       item.innerHTML=`<span class="fi">${isF?'📁':'🖼'}</span><span class="fn">${f.name}</span><span class="fm">${isF?'folder':f.size?Math.round(f.size/1024)+'KB':''}</span>`;
-      if(isF) item.onclick=()=>{stacks[w].push({id:curDir[w].id,name:curDir[w].name});loadDir(w,f.id,f.name);};
+      if(isF) item.onclick=()=>{ stacks[w].push({id:curDir[w].id,name:curDir[w].name}); loadDir(w,f.id,f.name); };
       else if(isI) item.onclick=()=>pickDriveImg(w,f.id,f.name,item);
       list.appendChild(item);
     });
-  } catch(e){list.innerHTML=`<div class="dbe" style="color:#E07070">Error: ${e.message}</div>`;}
+  } catch(e) { list.innerHTML=`<div class="dbe" style="color:#E07070">Error: ${e.message}</div>`; }
 }
 
 async function pickDriveImg(w,fid,fname,itemEl) {
@@ -883,13 +758,18 @@ async function pickDriveImg(w,fid,fname,itemEl) {
       document.getElementById('rc').classList.remove('on');
       setStatus(`Ready to test: ${fname}`,'ok');
     }
-  } catch(e){setStatus('Image load failed: '+e.message,'err');}
+  } catch(e) { setStatus('Image load failed: '+e.message,'err'); }
 }
 
-function bback(w){const s=stacks[w];if(!s.length)return;const prev=s.pop();loadDir(w,prev.id,prev.name);}
-function brefresh(w){loadDir(w,curDir[w].id,curDir[w].name);}
+function bback(w) {
+  const s=stacks[w]; if(!s.length)return;
+  const prev=s.pop(); loadDir(w,prev.id,prev.name);
+}
+function brefresh(w) { loadDir(w,curDir[w].id,curDir[w].name); }
 
-// ─── AUTO IMPORT ──────────────────────────────
+// ─────────────────────────────────────────────
+//  AUTO IMPORT DATASET
+// ─────────────────────────────────────────────
 async function autoImport() {
   if(!token){showGuide();setStatus('Connect Drive first.','err');return;}
   document.getElementById('ai-prog').style.display='block';
@@ -898,28 +778,35 @@ async function autoImport() {
   const res=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(q)}&fields=files(id,name)&pageSize=3`);
   if(!res.files||!res.files.length){setStatus(`Folder "${DATASET_FOLDER_NAME}" not found.`,'err');document.getElementById('ai-prog').style.display='none';return;}
   const dsId=res.files[0].id; log(`Found ${DATASET_FOLDER_NAME}`,'hi');
+
+  // List species subfolders
   const sub=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(`'${dsId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`)}&fields=files(id,name)&pageSize=100`);
   const species=sub.files||[];
   if(!species.length){setStatus('No species subfolders found.','err');return;}
   log(`Found ${species.length} species: ${species.map(s=>s.name).join(', ')}`,'hi');
-  species.forEach(sp=>{if(!S.classes.includes(sp.name)){S.classes.push(sp.name);S.counts[sp.name]=0;}});
+  species.forEach(sp=>{ if(!S.classes.includes(sp.name)){S.classes.push(sp.name);S.counts[sp.name]=0;} });
   renderAll();
-  const all={}; let total=0;
-  for(const sp of species){
+
+  // Gather all images
+  const all={};
+  let total=0;
+  for(const sp of species) {
     const r=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(`'${sp.id}' in parents and (${IMAGE_MIMES.map(m=>`mimeType='${m}'`).join(' or ')}) and trashed=false`)}&fields=files(id,name,mimeType)&pageSize=500`);
     all[sp.name]=r.files||[]; total+=all[sp.name].length;
   }
   log(`Total images: ${total}`);
+
   let done=0;
-  for(const sp of species){
-    for(const img of all[sp.name]){
-      try{
+  for(const sp of species) {
+    for(const img of all[sp.name]) {
+      try {
         const blob=await dload(img.id);
         const file=new File([blob],img.name,{type:blob.type||'image/jpeg'});
-        const t=await file2tensor(file); const f=extractFeat(t); t.dispose();
+        const t=await file2tensor(file);
+        const f=extractFeat(t); t.dispose();
         buf.push({data:Array.from(f.dataSync()),label:S.classes.indexOf(sp.name)}); f.dispose();
         S.counts[sp.name]=(S.counts[sp.name]||0)+1;
-      }catch(e){log(`Skipped ${img.name}`,'w');}
+      } catch(e) { log(`Skipped ${img.name}`,'w'); }
       done++;
       const pct=Math.round(done/total*100);
       document.getElementById('ai-fill').style.width=pct+'%';
@@ -934,41 +821,55 @@ async function autoImport() {
   await retrain();
 }
 
-// ─── DRIVE API HELPERS ────────────────────────
+// ─────────────────────────────────────────────
+//  DRIVE API HELPERS
+// ─────────────────────────────────────────────
 const enc=s=>encodeURIComponent(s);
-async function dget(url){const r=await fetch(url,{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw new Error(r.status+' '+r.statusText);return r.json();}
-async function dload(fid){const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fid}?alt=media`,{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw new Error('Download failed: '+r.status);return r.blob();}
-async function dupload(name,parentId,content,mime='application/json'){
+async function dget(url) {
+  const r=await fetch(url,{headers:{Authorization:'Bearer '+token}});
+  if(!r.ok)throw new Error(r.status+' '+r.statusText);
+  return r.json();
+}
+async function dload(fid) {
+  const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fid}?alt=media`,{headers:{Authorization:'Bearer '+token}});
+  if(!r.ok)throw new Error('Download failed: '+r.status);
+  return r.blob();
+}
+async function dupload(name,parentId,content,mime='application/json') {
   const meta=JSON.stringify({name,parents:[parentId]});
   const form=new FormData();
   form.append('metadata',new Blob([meta],{type:'application/json'}));
   form.append('file',typeof content==='string'?new Blob([content],{type:mime}):content);
   const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',{method:'POST',headers:{Authorization:'Bearer '+token},body:form});
-  if(!r.ok)throw new Error('Upload: '+r.status); return r.json();
+  if(!r.ok)throw new Error('Upload: '+r.status);
+  return r.json();
 }
-async function dupdate(fid,content,mime='application/json'){
+async function dupdate(fid,content,mime='application/json') {
   const r=await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fid}?uploadType=media`,{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':mime},body:typeof content==='string'?new Blob([content],{type:mime}):content});
-  if(!r.ok)throw new Error('Update: '+r.status); return r.json();
+  if(!r.ok)throw new Error('Update: '+r.status);
+  return r.json();
 }
-async function getOrMkdir(name,parent='root'){
+async function getOrMkdir(name,parent='root') {
   const q=`name='${name}' and mimeType='application/vnd.google-apps.folder' and '${parent}' in parents and trashed=false`;
   const res=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(q)}&fields=files(id)&pageSize=1`);
   if(res.files&&res.files.length)return res.files[0].id;
   const r=await fetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({name,mimeType:'application/vnd.google-apps.folder',parents:[parent]})});
   return (await r.json()).id;
 }
-async function findFile(name,parent){
+async function findFile(name,parent) {
   const q=`name='${name}' and '${parent}' in parents and trashed=false`;
   const res=await dget(`https://www.googleapis.com/drive/v3/files?q=${enc(q)}&fields=files(id)&pageSize=1`);
   return (res.files&&res.files.length)?res.files[0].id:null;
 }
 
-// ─── CLOUD SYNC ───────────────────────────────
+// ─────────────────────────────────────────────
+//  CLOUD SYNC
+// ─────────────────────────────────────────────
 async function cloudSync(dir) {
   if(!token)return;
   try {
     const fid=await getOrMkdir(SAVE_FOLDER_NAME);
-    if(dir==='save'){
+    if(dir==='save') {
       const payload=JSON.stringify({state:{classes:S.classes,counts:S.counts,sessions:S.sessions,lastAcc:S.lastAcc},buf,topology:model?model.toJSON():null,weights:model?model.getWeights().map(w=>({d:Array.from(w.dataSync()),s:w.shape,t:w.dtype})):null});
       const eid=await findFile('woodlens_data.json',fid);
       if(eid)await dupdate(eid,payload); else await dupload('woodlens_data.json',fid,payload);
@@ -977,19 +878,25 @@ async function cloudSync(dir) {
       log('☁ Saved to Google Drive','hi');
     } else {
       const eid=await findFile('woodlens_data.json',fid);
-      if(!eid){log('No saved data on Drive yet.','w');setStatus('No saved data found on Drive.','err');return;}
+      if(!eid){log('No saved data on Drive yet. Train some samples first!','w');setStatus('No saved data found on Drive.','err');return;}
       setStatus('Downloading data from Drive…','',true);
       const blob=await dload(eid);
       const text=await blob.text();
       let data;
-      try{data=JSON.parse(text);}catch(e){log('❌ Corrupted data file: '+e.message,'w');setStatus('Data file corrupted.','err');return;}
+      try { data=JSON.parse(text); } catch(e){ log('❌ Corrupted data file on Drive: '+e.message,'w'); setStatus('Data file corrupted.','err'); return; }
+
+      // Restore state - handle both old and new key formats
       if(data.state){S.classes=data.state.classes||[];S.counts=data.state.counts||{};S.sessions=data.state.sessions||0;S.lastAcc=data.state.lastAcc||null;}
-      const rawBuf=data.buf||data.trainingBuffer||[];
+      // Support both 'buf' and 'trainingBuffer' key names
+      const rawBuf = data.buf || data.trainingBuffer || [];
       if(rawBuf.length) buf=rawBuf;
+
       log(`⬇ Loaded: ${buf.length} samples, ${S.classes.length} classes`,'hi');
+
+      // Try to restore saved model weights
       let modelRestored=false;
-      if(data.topology&&data.weights&&data.weights.length&&S.classes.length>=2){
-        try{
+      if(data.topology && data.weights && data.weights.length && S.classes.length>=2) {
+        try {
           if(model)try{model.dispose()}catch(e){}
           model=await tf.models.modelFromJSON(data.topology);
           model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
@@ -997,31 +904,39 @@ async function cloudSync(dir) {
           model.setWeights(a); a.forEach(t=>t.dispose());
           modelRestored=true;
           log('✔ Model weights restored!','hi');
-        }catch(e){log('⚠ Could not restore weights, retraining…','w');model=null;}
+        } catch(e) {
+          log('⚠ Could not restore weights, retraining from samples…','w');
+          model=null;
+        }
       }
-      if(!modelRestored&&buf.length>=S.classes.length&&S.classes.length>=2){
+
+      // If weights failed but we have samples, retrain from scratch
+      if(!modelRestored && buf.length>=S.classes.length && S.classes.length>=2) {
         log('Retraining model from saved samples…','hi');
         await saveLocal(); renderAll();
         await retrain();
       } else {
         await saveLocal(); renderAll();
       }
+
       setStatus(`Restored: ${buf.length} samples, ${S.classes.length} species, acc: ${S.lastAcc||'—'}`,'ok');
     }
-  } catch(e){log('❌ Drive sync error: '+e.message,'w');setStatus('Drive error: '+e.message,'err');}
+  } catch(e) { log('❌ Drive sync error: '+e.message,'w'); setStatus('Drive error: '+e.message,'err'); }
 }
 
 async function logResult(cls,conf) {
-  try{
+  try {
     const fid=await getOrMkdir(SAVE_FOLDER_NAME);
     const line=`${new Date().toISOString()},${cls},${(conf*100).toFixed(1)}%\n`;
     const eid=await findFile('test_results.csv',fid);
     if(eid){const b=await dload(eid);await dupdate(eid,(await b.text())+line,'text/csv');}
     else await dupload('test_results.csv',fid,'timestamp,prediction,confidence\n'+line,'text/csv');
-  }catch(e){}
+  } catch(e) {}
 }
 
-// ─── DATA PANEL ───────────────────────────────
+// ─────────────────────────────────────────────
+//  DATA PANEL
+// ─────────────────────────────────────────────
 function refreshData() {
   document.getElementById('d-cls').textContent=S.classes.length;
   document.getElementById('d-samp').textContent=buf.length;
@@ -1054,28 +969,33 @@ async function resetAll() {
   setStatus('Data reset.',''); log('⚠ All data cleared.');
 }
 
-// ─── SETUP GUIDE ──────────────────────────────
+// ─────────────────────────────────────────────
+//  SETUP GUIDE
+// ─────────────────────────────────────────────
 function showGuide(){document.getElementById('guide').classList.add('on');}
 
-// ─── INIT ─────────────────────────────────────
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
 async function init() {
   await openIDB();
   await loadLocal();
   if(CLIENT_ID) document.getElementById('cid-inp').value=CLIENT_ID;
   renderAll();
-  if(CLIENT_ID) setTimeout(initGIS,1800);
+  // Auto-init GIS since Client ID is hardcoded
+  if(CLIENT_ID) setTimeout(initGIS, 1800);
   try {
     await loadFeat();
     await loadModelLocal();
-    if(buf.length>0&&model){
+    if(buf.length>0&&model) {
       setStatus(`Ready — ${buf.length} samples, ${S.classes.length} species`,'ok');
       log(`✔ Resumed session: ${buf.length} samples, ${S.classes.length} classes`,'hi');
-    } else if(S.classes.length>0){
+    } else if(S.classes.length>0) {
       setStatus('Backbone ready. Add training images.','ok');
     } else {
       setStatus('Ready. Add species & images to begin.','ok');
     }
-  } catch(err){
+  } catch(err) {
     setStatus('Could not load backbone. Check internet connection.','err');
     log('❌ '+err.message,'w');
   }
